@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{seo.title}}</title>
+
+    <!-- SEO and Social Media Meta Tags -->
+    <link rel="canonical" href="{{seo.url}}">
+    <meta name="description" content="{{seo.description}}">
+    <meta property="og:title" content="{{seo.title}}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{seo.url}}">
+    <meta property="og:description" content="{{seo.description}}">
+    <meta property="og:image" content="{{seo.image}}">
+    <meta name="twitter:card" content="summary">
+
+    <!-- Bootstrap, FontAwesome, AdminLTE CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/css/bootstrap.min.css">
+    <link href="https://unpkg.com/video.js/dist/video-js.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/css/adminlte.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/4.3.1/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+
+    <!-- Video.js and HLS support -->
+    <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
+    <script src="https://unpkg.com/videojs-http-streaming/dist/videojs-http-streaming.min.js"></script>
+
+    <style>
+        /* Custom styles */
+        .video-js .vjs-live-control {
+            display: none !important;
+        }
+
+        .video-js .vjs-tech {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .chat-sidebar {
+            border-left: 1px solid #dee2e6;
+            padding: 0;
+            overflow-y: auto;
+        }
+
+        .info-panel {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div> <!-- The Handlebars template will be rendered inside this div -->
+        <nav class="main-header navbar navbar-expand navbar-light navbar-white">
+            <div class="container">
+                <a href="#" class="navbar-brand">
+                    <span class="brand-text font-weight-light">Spectare.live</span>
+                </a>
+                <!-- Left navbar links -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link">Contact</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Help
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">FAQ</a>
+                            <a class="dropdown-item" href="#">Support</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Contact</a>
+                        </div>
+                    </li>
+                </ul>
+                <!-- SEARCH FORM -->
+                <form class="form-inline ml-3" onsubmit="return redirectToStream();">
+                    <div class="input-group input-group-sm">
+                        <input id="searchQuery" class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                        <div class="input-group-append">
+                            <button id="searchButton" class="btn btn-navbar">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <!-- Right navbar links -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Messages Dropdown Menu -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i class="fas fa-comments"></i>
+                            <span class="badge badge-danger navbar-badge">3</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            <a href="#" class="dropdown-item">
+                                <!-- Message Start -->
+                                <div class="media">
+                                    <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                                    <div class="media-body">
+                                        <h3 class="dropdown-item-title">
+                                            Brad Diesel
+                                            <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                                        </h3>
+                                        <p class="text-sm">Call me whenever you can...</p>
+                                        <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                    </div>
+                                </div>
+                                <!-- Message End -->
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <!-- Message Start -->
+                                <div class="media">
+                                    <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                    <div class="media-body">
+                                        <h3 class="dropdown-item-title">
+                                            John Pierce
+                                            <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                                        </h3>
+                                        <p class="text-sm">I got your message bro</p>
+                                        <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                    </div>
+                                </div>
+                                <!-- Message End -->
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <!-- Message Start -->
+                                <div class="media">
+                                    <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                    <div class="media-body">
+                                        <h3 class="dropdown-item-title">
+                                            Nora Silvester
+                                            <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                                        </h3>
+                                        <p class="text-sm">The subject goes here</p>
+                                        <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                    </div>
+                                </div>
+                                <!-- Message End -->
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                        </div>
+                    </li>
+                    <!-- Notifications Dropdown Menu -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i class="far fa-bell"></i>
+                            <span class="badge badge-warning navbar-badge">15</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            <span class="dropdown-header">15 Notifications</span>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-envelope mr-2"></i> 4 new messages
+                                <span class="float-right text-muted text-sm">3 mins</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-users mr-2"></i> 8 friend requests
+                                <span class="float-right text-muted text-sm">12 hours</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-file mr-2"></i> 3 new reports
+                                <span class="float-right text-muted text-sm">2 days</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
+                            <i class="fas fa-th-large"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+ 
+        <!-- /.navbar -->
+        <!-- Page Content -->
+        <div class="container mt-4">
+            <div class="row">
+                <!-- Video Player Column -->
+                <div class="col-md-8">
+
+                    <!-- Ribbon with "Live" text -->
+                    <div class="ribbon-wrapper ribbon-xl">
+                        <div class="ribbon text-xl">
+                            <div class="ribbon bg-success">Live</div>
+                        </div>
+                    </div>
+
+                    <video id="my-video" class="video-js vjs-default-skin vjs-fluid" controls preload="auto" data-setup="{}">
+                        <source src="https://ns330222.ip-5-196-66.eu/live/{{streamKey}}.m3u8" type="application/x-mpegURL">
+                    </video>
+                    <div class="info-panel card">
+                        <div class="card card-widget widget-user shadow">
+
+                            <div class="widget-user-header bg-info">
+                                <h3 class="widget-user-username">Alexander Pierce</h3>
+                                <h5 class="widget-user-desc">Founder &amp; CEO</h5>
+                            </div>
+                            <div class="widget-user-image">
+                                <img class="img-circle elevation-2" src="https://www.testhouse.net/wp-content/uploads/2021/11/default-avatar.jpg" alt="User Avatar">
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-sm-4 border-right">
+                                        <div class="description-block">
+                                            <h5 class="description-header">3,200</h5>
+                                            <span class="description-text">STREAMS</span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-4 border-right">
+                                        <div class="description-block">
+                                            <h5 class="description-header">13,000</h5>
+                                            <span class="description-text">FOLLOWERS</span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="description-block">
+                                            <h5 class="description-header">35</h5>
+                                            <span class="description-text">VODS</span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Video Description Panel -->
+                    <div class="info-panel card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-info-circle"></i> Video Description</h3>
+                        </div>
+                        <div class="card-body">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum.
+                        </div>
+                    </div>
+
+                    <!-- More Information Panel -->
+                    <div class="info-panel card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="far fa-file-alt"></i> More Information</h3>
+                        </div>
+                        <div class="card-body">
+                            Additional details about the video content, links, or other relevant information.
+                        </div>
+                    </div>
+                    <!-- More Information Panel -->
+                    <div class="info-panel card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="far fa-file-alt"></i>Stream Timeline</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Main node for this component -->
+                            <div class="timeline">
+                                <!-- Timeline time label -->
+                                <div class="time-label">
+                                    <span class="bg-green">23 Aug. 2019</span>
+                                </div>
+                                <div>
+                                    <!-- Before each timeline item corresponds to one icon on the left scale -->
+                                    <i class="fas fa-envelope bg-blue"></i>
+                                    <!-- Timeline item -->
+                                    <div class="timeline-item">
+                                        <!-- Time -->
+                                        <span class="time"><i class="fas fa-clock"></i> 12:05</span>
+                                        <!-- Header. Optional -->
+                                        <h3 class="timeline-header"><a href="#">Stream Start</a> Stream has been started</h3>
+                                        <!-- Body -->
+                                        <div class="timeline-body">
+                                            Do not miss the next stream! Be sure to follow and subscribe to the channel for notifications.
+                                        </div>
+                                        <!-- Placement of additional controls. Optional -->
+                                        <div class="timeline-footer">
+                                            <a class="btn btn-danger btn-sm">Stop Stream</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- The last icon means the story is complete -->
+                                <div>
+                                    <i class="fas fa-clock bg-gray"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Sidebar Column -->
+                <div class="col-md-4 chat-sidebar">
+                    <!-- Chat Widget Iframe -->
+                    
+
+                <iframe width="100%" height="500" scrolling="no" src="https://widget.mibbit.com/?settings=8141a9d9319bd3dadda0e10de4e686ef&autoConnect=true&showMotd=false&server=irc.spectare.live&channel=%23{{streamKey}}" style="border:none;"></iframe>
+                </div>
+            </div>
+        </div>
+      
+    </div>
+        <script>
+            function redirectToStream() {
+                // Prevent the default form submission
+                event.preventDefault();
+
+                // Get the value of the search query
+                var searchQuery = document.getElementById('searchQuery').value;
+
+                // Redirect the user to the new URL with the search query
+                window.location.href = '/stream/' + encodeURIComponent(searchQuery);
+
+                // Return false to prevent the default form submission
+                return false;
+            }
+
+            // Add the event listener to the search button
+            document.getElementById('searchButton').addEventListener('click', redirectToStream);
+        </script>
+        <!-- Initialize Video.js -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var player = videojs('my-video');
+            });
+        </script>
+        <!-- Bootstrap and jQuery JS, including Popper -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
